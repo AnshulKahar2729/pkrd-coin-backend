@@ -1,0 +1,35 @@
+const { Validator } = require('node-input-validator');
+const helper = require('./helper')
+const { FAILED_API } = require('../../../../utils/return.response');
+const { USER } = require('../../../../utils/constants/model.constants');
+
+module.exports = {
+
+    add: async function (req, res, next) {
+        console.log('--------in validation check------------')
+        let v = new Validator(req.body, {
+            exchange_amount_pkrd: 'required',
+            exchange_value_usdt: 'required',
+            wallet_address: 'required',
+        });
+        let errorsResponse = await helper.checkValidation(v)
+
+        if (errorsResponse) {
+            return FAILED_API(res, errorsResponse)
+        }
+        next();
+    },
+
+    update_status: async function (req, res, next) {
+        console.log('--------in validation check------------')
+        let v = new Validator(req.body, {
+            id: 'required',
+        });
+        let errorsResponse = await helper.checkValidation(v)
+
+        if (errorsResponse) {
+            return FAILED_API(res, errorsResponse)
+        }
+        next();
+    },
+}
